@@ -24,38 +24,8 @@ template <typename T>
 struct TypeWrapper
 {
 	typedef T TYPE;
-	typedef const T CONSTTYPE;
 	typedef T& REFTYPE;
-	typedef const T& CONSTREFTYPE;
 };
-
-template <typename T>
-struct TypeWrapper<const T>
-{
-	typedef T TYPE;
-	typedef const T CONSTTYPE;
-	typedef T& REFTYPE;
-	typedef const T& CONSTREFTYPE;
-};
-
-template <typename T>
-struct TypeWrapper<const T&>
-{
-	typedef T TYPE;
-	typedef const T CONSTTYPE;
-	typedef T& REFTYPE;
-	typedef const T& CONSTREFTYPE;
-};
-
-template <typename T>
-struct TypeWrapper<T&>
-{
-	typedef T TYPE;
-	typedef const T CONSTTYPE;
-	typedef T& REFTYPE;
-	typedef const T& CONSTREFTYPE;
-};
-
 
 class Variant
 {
@@ -72,18 +42,6 @@ public:
 	typename TypeWrapper<T>::REFTYPE getValue()
 	{
 		return dynamic_cast<VariantImpl<typename TypeWrapper<T>::TYPE>&>(*mImpl.get()).mValue;
-	}
-
-	template<class T>
-	typename TypeWrapper<T>::CONSTREFTYPE getValue() const
-	{
-		return dynamic_cast<VariantImpl<typename TypeWrapper<T>::TYPE>&>(*mImpl.get()).mValue;
-	}
-
-	template<class T>
-	void setValue(typename TypeWrapper<T>::CONSTREFTYPE inValue)
-	{
-		mImpl.reset(new VariantImpl<typename TypeWrapper<T>::TYPE>(inValue));
 	}
 
 private:

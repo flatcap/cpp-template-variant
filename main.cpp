@@ -29,5 +29,8 @@ int main (int, char *[])
 
 	Variant v2 (std::string ("hello"));
 	std::cout << v2.getValue<std::string>() << std::endl;
+
+	Variant v3 (3.14159);
+	std::cout << v3.getValue<double>() << std::endl;
 }
 
