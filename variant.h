@@ -19,47 +19,43 @@
 #define _VARIANT_H_
 
 #include <memory>
-
-template <typename X>
-struct TypeWrapper
-{
-	typedef X TYPE;
-};
+#include <typeinfo>
 
 class Variant
 {
 public:
 	Variant() { }
 
-	template<class Y>
-	Variant(Y val) :
-		mImpl(new VariantImpl<Y>(val))
+	template<class T>
+	Variant(T val) :
+		mImpl(new VariantImpl<T>(val))
 	{
 	}
 
-	template<class Y>
-	Y& getValue()
+	template<class T>
+	T& getValue()
 	{
-		return dynamic_cast<VariantImpl<typename TypeWrapper<Y>::TYPE>&> (*mImpl.get()).mValue;
+		return dynamic_cast<VariantImpl<T>&> (*mImpl).mValue;
+	}
+
+	template<class T>
+	void setValue(const T& inValue)
+	{
+		mImpl.reset(new VariantImpl<T>(inValue));
 	}
 
 private:
 	struct AbstractVariantImpl
 	{
-		virtual ~AbstractVariantImpl() {}
+		virtual ~AbstractVariantImpl() { }
 	};
 
-	template<class Z>
+	template<class T>
 	struct VariantImpl : public AbstractVariantImpl
 	{
-		VariantImpl(Z val) :
-			mValue(val)
-		{
-		}
-
-		~VariantImpl() {}
-
-		Z mValue;
+		VariantImpl(T val) : mValue(val) { }
+		~VariantImpl() { }
+		T mValue;
 	};
 
 	std::shared_ptr<AbstractVariantImpl> mImpl;
