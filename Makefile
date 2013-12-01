@@ -16,7 +16,7 @@ OUT	= main
 CFLAGS	+= -std=c++11
 CFLAGS	+= -g -Wall -Wextra -Wpedantic
 
-CFLAGS	+= -fdiagnostics-color=always
+#CFLAGS	+= -fdiagnostics-color=always
 CFLAGS	+= -fno-omit-frame-pointer
 CFLAGS	+= -fno-inline-functions
 CFLAGS	+= -fno-inline-functions-called-once

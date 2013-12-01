@@ -20,11 +20,10 @@
 
 #include <memory>
 
-template <typename T>
+template <typename X>
 struct TypeWrapper
 {
-	typedef T TYPE;
-	typedef T& REFTYPE;
+	typedef X TYPE;
 };
 
 class Variant
@@ -32,16 +31,16 @@ class Variant
 public:
 	Variant() { }
 
-	template<class T>
-	Variant(T inValue) :
-		mImpl(new VariantImpl<typename TypeWrapper<T>::TYPE>(inValue))
+	template<class Y>
+	Variant(Y val) :
+		mImpl(new VariantImpl<Y>(val))
 	{
 	}
 
-	template<class T>
-	typename TypeWrapper<T>::REFTYPE getValue()
+	template<class Y>
+	Y& getValue()
 	{
-		return dynamic_cast<VariantImpl<typename TypeWrapper<T>::TYPE>&>(*mImpl.get()).mValue;
+		return dynamic_cast<VariantImpl<typename TypeWrapper<Y>::TYPE>&> (*mImpl.get()).mValue;
 	}
 
 private:
@@ -50,17 +49,17 @@ private:
 		virtual ~AbstractVariantImpl() {}
 	};
 
-	template<class T>
+	template<class Z>
 	struct VariantImpl : public AbstractVariantImpl
 	{
-		VariantImpl(T inValue) :
-			mValue(inValue)
+		VariantImpl(Z val) :
+			mValue(val)
 		{
 		}
 
 		~VariantImpl() {}
 
-		T mValue;
+		Z mValue;
 	};
 
 	std::shared_ptr<AbstractVariantImpl> mImpl;
